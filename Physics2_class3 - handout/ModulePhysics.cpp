@@ -34,7 +34,7 @@ bool ModulePhysics::Start()
 	int x = SCREEN_WIDTH / 2;
 	int y = SCREEN_HEIGHT / 1.5f;
 	int diameter = SCREEN_WIDTH / 2;
-
+	/*
 	b2BodyDef body;
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -47,7 +47,7 @@ bool ModulePhysics::Start()
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	b->CreateFixture(&fixture);
-
+	*/
 	int pinball[158] = {
 		150, 550,
 		148, 538,

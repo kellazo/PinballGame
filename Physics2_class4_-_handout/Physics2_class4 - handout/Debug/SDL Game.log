@@ -1,26 +1,26 @@
-﻿Build started 21/10/2015 22:15:46.
-     1>Project "D:\ProjectsGitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\SDL Game.vcxproj" on node 2 (Build target(s)).
+﻿Build started 22/10/2015 21:35:55.
+     1>Project "C:\Users\Pau\Documents\GitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\SDL Game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Application.cpp log.cpp Main.cpp ModuleAudio.cpp ModuleInput.cpp ModulePhysics.cpp ModulePlayer.cpp ModuleRender.cpp ModuleSceneIntro.cpp ModuleTextures.cpp ModuleWindow.cpp
          ModuleWindow.cpp
          ModuleTextures.cpp
          ModuleSceneIntro.cpp
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(158): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(160): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(162): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(165): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(173): warning C4101: 'y' : unreferenced local variable
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(173): warning C4101: 'x' : unreferenced local variable
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(158): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(160): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(162): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(165): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(173): warning C4101: 'y' : unreferenced local variable
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulesceneintro.cpp(173): warning C4101: 'x' : unreferenced local variable
          ModuleRender.cpp
          ModulePlayer.cpp
          ModulePhysics.cpp
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(40): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(121): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(122): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(165): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(375): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(376): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
-     1>d:\projectsgithub\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(382): warning C4244: 'return' : conversion from 'float32' to 'int', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(40): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(121): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(122): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(165): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(375): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(376): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\pau\documents\github\pinballgame\physics2_class4_-_handout\physics2_class4 - handout\modulephysics.cpp(382): warning C4244: 'return' : conversion from 'float32' to 'int', possible loss of data
          ModuleInput.cpp
          ModuleAudio.cpp
          Main.cpp
@@ -28,7 +28,7 @@
          Application.cpp
          Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\ProjectsGitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\ProjectsGitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\ProjectsGitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.lib" /MACHINE:X86 Debug\Application.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Pau\Documents\GitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Pau\Documents\GitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Pau\Documents\GitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.lib" /MACHINE:X86 Debug\Application.obj
          Debug\log.obj
          Debug\Main.obj
          Debug\ModuleAudio.obj
@@ -40,9 +40,9 @@
          Debug\ModuleTextures.obj
          Debug\ModuleWindow.obj
      1>MSVCRTD.lib(cinitexe.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
-         SDL Game.vcxproj -> D:\ProjectsGitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.exe
-     1>Done Building Project "D:\ProjectsGitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\SDL Game.vcxproj" (Build target(s)).
+         SDL Game.vcxproj -> C:\Users\Pau\Documents\GitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\Debug\2D Physics - class 4.exe
+     1>Done Building Project "C:\Users\Pau\Documents\GitHub\PinballGame\Physics2_class4_-_handout\Physics2_class4 - handout\SDL Game.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.93
+Time Elapsed 00:00:06.31

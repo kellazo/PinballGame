@@ -28,6 +28,7 @@ bool ModuleSceneIntro::Start()
 	circle = App->textures->Load("pinball/wheel.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
+	pinball_emtpy = App->textures->Load("pinball/pinball_empty.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// TODO: Homework - create a sensor
@@ -46,6 +47,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN){
+		App->renderer->Blit(pinball_emtpy, 0, 0);
+	}
+
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
