@@ -17,6 +17,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 	world = NULL;
 	mouse_joint = NULL;
 	debug = true;
+	
 }
 
 // Destructor
@@ -126,6 +127,62 @@ bool ModulePhysics::Start()
 		218, 833
 	};
 	CreateChainStatic(0, 0, pinball, 138);
+
+	int flippers[28] = {
+		159, 686,
+		156, 670,
+		169, 659,
+		184, 668,
+		200, 682,
+		218, 699,
+		241, 717,
+		246, 722,
+		246, 730,
+		243, 734,
+		230, 733,
+		216, 724,
+		198, 713,
+		160, 686
+	};
+	CreateChainStatic(0, 0, flippers, 28);
+
+
+	b2Vec2 p1(-2.0f, 0.0f);
+
+	
+	bd.type = b2_dynamicBody;
+
+	bd.position = p1;
+	b2Body* leftFlipper = world->CreateBody(&bd);
+
+	
+
+	b2PolygonShape box;
+	box.SetAsBox(1.75f, 0.1f);
+
+	b2FixtureDef fd;
+	fd.shape = &box;
+	fd.density = 1.0f;
+
+	leftFlipper->CreateFixture(&fd);
+
+	b2RevoluteJointDef jd;
+	jd.bodyA = ground;
+	jd.localAnchorB.SetZero();
+	jd.enableMotor = true;
+	jd.maxMotorTorque = 1000.0f;
+	jd.enableLimit = true;
+
+	b2RevoluteJoint*  m_leftJoint = NULL;
+
+	jd.motorSpeed = 0.0f;
+	jd.localAnchorA = p1;
+	jd.bodyB = leftFlipper;
+	jd.lowerAngle = -30.0f * b2_pi / 180.0f;
+	jd.upperAngle = 5.0f * b2_pi / 180.0f;
+	m_leftJoint = (b2RevoluteJoint*)world->CreateJoint(&jd);
+
+	
 
 	return true;
 }

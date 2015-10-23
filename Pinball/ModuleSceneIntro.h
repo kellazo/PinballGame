@@ -29,6 +29,7 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* pinball_empty;
+	SDL_Texture* flippers;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
