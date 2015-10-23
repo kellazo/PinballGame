@@ -350,6 +350,12 @@ PhysBody* ModulePhysics::CreateChainStatic(int x, int y, int* points, int size)
 // 
 update_status ModulePhysics::PostUpdate()
 {
+	
+	
+	b2Vec2 mouse_position;
+	PhysBody* body_clicked = NULL;
+	
+	
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
@@ -428,8 +434,21 @@ update_status ModulePhysics::PostUpdate()
 			}
 
 			// TODO 1: If mouse button 1 is pressed ...
-			// App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
-			// test if the current body contains mouse position
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			{
+				mouse_position.x = PIXEL_TO_METERS(App->input->GetMouseX());
+				mouse_position.y = PIXEL_TO_METERS(App->input->GetMouseY());
+
+				// test if the current body contains mouse position
+				if (f->TestPoint(mouse_position))
+				{
+					PhysBody* body_clicked = (PhysBody*)f->GetBody()->GetUserData();
+					LOG("HAS FET CLICK AL OBJECTE");
+					break;
+				}
+			}
+
+	
 		}
 	}
 
@@ -437,10 +456,34 @@ update_status ModulePhysics::PostUpdate()
 	// so we can pull it around
 	// TODO 2: If a body was selected, create a mouse joint
 	// using mouse_joint class property
+	if (body_clicked != NULL)
+	{
+		b2MouseJointDef def;
+		def.bodyA = ground;
+		def.bodyB = body_clicked->body;
+		def.target = mouse_position;
+		def.dampingRatio = 0.5f;
+		def.frequencyHz = 2.0f;
+		def.maxForce = 100.0f * body_clicked->body->GetMass();
+
+		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+
+	}
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		App->renderer->DrawLine(METERS_TO_PIXELS(mouse_position.x), METERS_TO_PIXELS(mouse_position.y), METERS_TO_PIXELS(mouse_position.x), METERS_TO_PIXELS(mouse_position.y), 100, 150, 255);
+			
+	}
+
+	
 
 
 	// TODO 3: If the player keeps pressing the mouse button, update
 	// target position and draw a red line between both anchor points
+	
+	
+
+
 
 	// TODO 4: If the player releases the mouse button, destroy the joint
 
