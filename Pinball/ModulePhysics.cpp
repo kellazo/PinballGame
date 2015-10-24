@@ -128,6 +128,27 @@ bool ModulePhysics::Start()
 		181, 637
 	};
 	CreateChainStatic(0, 0, left_triangles, 12);
+
+	int right_structures[12] = {
+		401, 694,
+		390, 674,
+		461, 623,
+		464, 505,
+		476, 494,
+		476, 644
+	};
+	CreateChainStatic(0, 0, right_structures, 12);
+
+	int right_triangles[12] = {
+		380, 619,
+		421, 535,
+		431, 527,
+		432, 595,
+		391, 637,
+		378, 637
+	};
+	CreateChainStatic(0, 0, right_triangles, 12);
+
 	int flippers[28] = {
 		159, 686,
 		156, 670,
