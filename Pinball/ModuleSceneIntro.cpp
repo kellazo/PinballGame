@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	pinball_empty = App->textures->Load("pinball/pinball_empty.png");
-	flippers = App->textures->Load("pinball/flippers.png");
+	//flippers = App->textures->Load("pinball/flippers.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 

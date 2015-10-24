@@ -109,6 +109,25 @@ bool ModulePhysics::Start()
 	};
 	CreateChainStatic(0, 0, pinball, 138);
 
+	int left_structures[12] = {
+		168, 670,
+		158, 690,
+		83, 645,
+		83, 500,
+		92, 507,
+		95, 622
+	};
+	CreateChainStatic(0, 0, left_structures, 12);
+
+	int left_triangles[12] = {
+		184, 621,
+		140, 537,
+		129, 529,
+		129, 601,
+		172, 637,
+		181, 637
+	};
+	CreateChainStatic(0, 0, left_triangles, 12);
 	int flippers[28] = {
 		159, 686,
 		156, 670,
