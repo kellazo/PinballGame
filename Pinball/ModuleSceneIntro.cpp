@@ -26,13 +26,17 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	circle = App->textures->Load("pinball/wheel1.png"); 
-	box = App->textures->Load("pinball/crate.png");
+	box = App->textures->Load("pinball/box.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	pinball_empty = App->textures->Load("pinball/pinball_empty.png");
 	//flippers = App->textures->Load("pinball/flippers.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+
+	circles.add(App->physics->CreateCircle(544, 602, 11));
+	boxes.add(App->physics->CreateRectangle(544, 613, 37, 19));
+	App->physics->CreateStaticRectangle(544, 613, 37, 19);
 
 	return ret;
 }
@@ -66,10 +70,6 @@ update_status ModuleSceneIntro::Update()
 		circles.getLast()->data->listener = this;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
