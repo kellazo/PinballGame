@@ -38,6 +38,12 @@ bool ModuleSceneIntro::Start()
 	boxes.add(App->physics->CreateRectangle(544, 613, 37, 19));
 	App->physics->CreateStaticRectangle(544, 613, 37, 19);
 
+	//creem una caixa qualsevol
+	PhysBody* caixa = App->physics->CreateRectangle(300,400,125,25);
+	//ara crear revolute join -> enganxar en cordenades de body que parteix des del centre i posem posicio a la esquina que es la meitat de width dividit per la meitat de heihgt
+	//segon dir a quin punt de lescenari en el anchor nomes si estas utilitzant una chain pk en aquest cas les chain ocupen tot l'escenari
+	App->physics->CreateRevoluteJoin(62, 12, 300, 400, caixa, App->physics->ground1);
+
 	return ret;
 }
 

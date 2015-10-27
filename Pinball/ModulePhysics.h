@@ -48,6 +48,7 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateChainStatic(int x, int y, int* points, int size);
+	void CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -58,4 +59,6 @@ private:
 	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
+public:
+	PhysBody* ground1;
 };

@@ -107,7 +107,8 @@ bool ModulePhysics::Start()
 		220, 833,
 		218, 833
 	};
-	CreateChainStatic(0, 0, pinball, 138);
+	//CreateChainStatic(0, 0, pinball, 138);
+	ground1 = CreateChainStatic(0, 0, pinball, 138);
 
 	int left_structures[12] = {
 		168, 670,
@@ -185,6 +186,51 @@ bool ModulePhysics::Start()
 	
 
 	return true;
+}
+//li passem els punts de cada enclaje segons el body, i ha de rebre quins son
+void ModulePhysics::CreateRevoluteJoin(int x1,int y1,int x2,int y2,PhysBody* bodyA ,PhysBody* bodyB)
+{
+	//
+
+	b2RevoluteJointDef jd;
+
+	jd.bodyA = bodyA->body;
+	jd.bodyB = bodyB->body;
+	//enganchem ancors
+	//A: localAnchor  reben un vector, pertam les cordenades pasarles a b2Vec2 i pasarles a metres
+	b2Vec2 AnchorA(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	b2Vec2 AnchorB(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+	jd.localAnchorA = AnchorA;
+	jd.localAnchorB = AnchorB;
+	//Amb aixo ja tenim les posicions, ara fem les propietats especifiques del revolute joint
+
+	//Especificar que vull un limit
+	jd.enableLimit = true;
+	//especificar quin es el limit de dalt i el de baix ( tambe tenim la opcio de posaro com a parametre
+	//i passaro a radiants
+	jd.upperAngle = 30*DEGTORAD;
+	jd.lowerAngle = -30*DEGTORAD;
+	//Especificar si vull motor;
+	jd.enableMotor = true;
+	//Torque maxim
+	jd.maxMotorTorque = 1000.0f;
+	//velocitat angular
+	jd.motorSpeed = - 360 * DEGTORAD;
+
+	//per cambiar velocitat d'un joint un cop creat, s'utilitza una funció que es diu SetMotorSpeed(), per arribar, agafes el body (en aquest cas un PhysBody)
+	//((b2RevoluteJoint*)pbody->body->GetJointList()->joint)->SetMotorSpeed()
+
+	world->CreateJoint(&jd);
+	
+
+	/*b2RevoluteJoint*  m_leftJoint = NULL;
+
+	jd.motorSpeed = 0.0f;
+	jd.localAnchorA = p1;
+	jd.bodyB = leftFlipper;
+	jd.lowerAngle = -30.0f * b2_pi / 180.0f;
+	jd.upperAngle = 5.0f * b2_pi / 180.0f;
+	m_leftJoint = (b2RevoluteJoint*)world->CreateJoint(&jd);*/
 }
 
 // 
