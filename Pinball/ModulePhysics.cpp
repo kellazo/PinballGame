@@ -109,7 +109,26 @@ bool ModulePhysics::Start()
 	};
 	//CreateChainStatic(0, 0, pinball, 138);
 	ground1 = CreateChainStatic(0, 0, pinball, 138);
-
+	int pinball_structure_up[32] = {
+		120, 223,
+		130, 229,
+		232, 233,
+		258, 216,
+		314, 217,
+		328, 232,
+		439, 231,
+		449, 219,
+		443, 194,
+		412, 149,
+		362, 115,
+		314, 105,
+		253, 105,
+		198, 119,
+		151, 151,
+		121, 209
+	};
+	CreateChainStatic(0, 0,pinball_structure_up, 32);
+	
 	int left_structures[12] = {
 		168, 670,
 		158, 690,
