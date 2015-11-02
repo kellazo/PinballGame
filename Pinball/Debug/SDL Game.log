@@ -1,19 +1,22 @@
-﻿Compilación iniciada a las 27/10/2015 13:52:40.
-     1>Proyecto "C:\Users\guillemmp3\Desktop\PinballGame\Pinball\SDL Game.vcxproj" en el nodo 2 (Build destinos).
+﻿Compilación iniciada a las 02/11/2015 10:11:17.
+     1>Proyecto "D:\Users\guillemmp3\Desktop\PinballGame\Pinball\SDL Game.vcxproj" en el nodo 2 (Build destinos).
      1>ClCompile:
-         C:\soft\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ModulePhysics.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ModulePhysics.cpp
          ModulePhysics.cpp
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(296): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(297): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(321): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(322): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(365): warning C4018: '<' : no coinciden signed/unsigned
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(399): warning C4018: '<' : no coinciden signed/unsigned
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(621): warning C4244: 'inicializando' : conversión de 'int' a 'float'; posible pérdida de datos
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(622): warning C4244: 'inicializando' : conversión de 'int' a 'float'; posible pérdida de datos
-     1>c:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(628): warning C4244: 'return' : conversión de 'float32' a 'int'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(252): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(253): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(277): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(278): warning C4244: '=' : conversión de 'float' a 'int'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(321): warning C4018: '<' : no coinciden signed/unsigned
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(355): warning C4018: '<' : no coinciden signed/unsigned
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(552): warning C4244: '=' : conversión de 'int' a 'float32'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(553): warning C4244: '=' : conversión de 'int' a 'float32'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(593): warning C4244: 'argumento' : conversión de 'int' a 'float32'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(637): warning C4244: 'inicializando' : conversión de 'int' a 'float'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(638): warning C4244: 'inicializando' : conversión de 'int' a 'float'; posible pérdida de datos
+     1>d:\users\guillemmp3\desktop\pinballgame\pinball\modulephysics.cpp(644): warning C4244: 'return' : conversión de 'float32' a 'int'; posible pérdida de datos
        Link:
-         C:\soft\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.lib" /MACHINE:X86 Debug\Application.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.lib" /MACHINE:X86 Debug\Application.obj
          Debug\log.obj
          Debug\Main.obj
          Debug\ModuleAudio.obj
@@ -24,9 +27,9 @@
          Debug\ModuleSceneIntro.obj
          Debug\ModuleTextures.obj
          Debug\ModuleWindow.obj
-         SDL Game.vcxproj -> C:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.exe
-     1>Compilación del proyecto terminada "C:\Users\guillemmp3\Desktop\PinballGame\Pinball\SDL Game.vcxproj" (Build destinos).
+         SDL Game.vcxproj -> D:\Users\guillemmp3\Desktop\PinballGame\Pinball\Debug\2D Physics - class 4.exe
+     1>Compilación del proyecto terminada "D:\Users\guillemmp3\Desktop\PinballGame\Pinball\SDL Game.vcxproj" (Build destinos).
 
 Compilación correcta.
 
-Tiempo transcurrido 00:00:02.22
+Tiempo transcurrido 00:00:01.60

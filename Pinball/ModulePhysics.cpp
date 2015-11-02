@@ -187,51 +187,6 @@ bool ModulePhysics::Start()
 
 	return true;
 }
-//li passem els punts de cada enclaje segons el body, i ha de rebre quins son
-void ModulePhysics::CreateRevoluteJoin(int x1,int y1,int x2,int y2,PhysBody* bodyA ,PhysBody* bodyB)
-{
-	//
-
-	b2RevoluteJointDef jd;
-
-	jd.bodyA = bodyA->body;
-	jd.bodyB = bodyB->body;
-	//enganchem ancors
-	//A: localAnchor  reben un vector, pertam les cordenades pasarles a b2Vec2 i pasarles a metres
-	b2Vec2 AnchorA(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
-	b2Vec2 AnchorB(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
-	jd.localAnchorA = AnchorA;
-	jd.localAnchorB = AnchorB;
-	//Amb aixo ja tenim les posicions, ara fem les propietats especifiques del revolute joint
-
-	//Especificar que vull un limit
-	jd.enableLimit = true;
-	//especificar quin es el limit de dalt i el de baix ( tambe tenim la opcio de posaro com a parametre
-	//i passaro a radiants
-	jd.upperAngle = 30*DEGTORAD;
-	jd.lowerAngle = -30*DEGTORAD;
-	//Especificar si vull motor;
-	jd.enableMotor = true;
-	//Torque maxim
-	jd.maxMotorTorque = 1000.0f;
-	//velocitat angular
-	jd.motorSpeed = - 360 * DEGTORAD;
-
-	//per cambiar velocitat d'un joint un cop creat, s'utilitza una funció que es diu SetMotorSpeed(), per arribar, agafes el body (en aquest cas un PhysBody)
-	//((b2RevoluteJoint*)pbody->body->GetJointList()->joint)->SetMotorSpeed()
-
-	world->CreateJoint(&jd);
-	
-
-	/*b2RevoluteJoint*  m_leftJoint = NULL;
-
-	jd.motorSpeed = 0.0f;
-	jd.localAnchorA = p1;
-	jd.bodyB = leftFlipper;
-	jd.lowerAngle = -30.0f * b2_pi / 180.0f;
-	jd.upperAngle = 5.0f * b2_pi / 180.0f;
-	m_leftJoint = (b2RevoluteJoint*)world->CreateJoint(&jd);*/
-}
 
 // 
 update_status ModulePhysics::PreUpdate()
@@ -417,6 +372,52 @@ PhysBody* ModulePhysics::CreateChainStatic(int x, int y, int* points, int size)
 	return pbody;
 }
 
+//li passem els punts de cada enclaje segons el body, i ha de rebre quins son
+void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB)
+{
+	//
+
+	b2RevoluteJointDef jd;
+
+	jd.bodyA = bodyA->body;
+	jd.bodyB = bodyB->body;
+	//enganchem ancors
+	//A: localAnchor  reben un vector, pertam les cordenades pasarles a b2Vec2 i pasarles a metres
+	b2Vec2 AnchorA(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	b2Vec2 AnchorB(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+	jd.localAnchorA = AnchorA;
+	jd.localAnchorB = AnchorB;
+	//Amb aixo ja tenim les posicions, ara fem les propietats especifiques del revolute joint
+
+	//Especificar que vull un limit
+	//jd.enableLimit = true;
+	//especificar quin es el limit de dalt i el de baix ( tambe tenim la opcio de posaro com a parametre
+	//i passaro a radiants
+	//jd.upperAngle = angle;
+	//jd.lowerAngle = angle_max;
+	//Especificar si vull motor;
+	//jd.enableMotor = true;
+	//Torque maxim
+	//jd.maxMotorTorque = 1000.0f;
+	//velocitat angular
+	//jd.motorSpeed = -360 * DEGTORAD;
+
+	//per cambiar velocitat d'un joint un cop creat, s'utilitza una funció que es diu SetMotorSpeed(), per arribar, agafes el body (en aquest cas un PhysBody)
+	//((b2RevoluteJoint*)pbody->body->GetJointList()->joint)->SetMotorSpeed()
+
+	world->CreateJoint(&jd);
+
+
+	/*b2RevoluteJoint*  m_leftJoint = NULL;
+
+	jd.motorSpeed = 0.0f;
+	jd.localAnchorA = p1;
+	jd.bodyB = leftFlipper;
+	jd.lowerAngle = -30.0f * b2_pi / 180.0f;
+	jd.upperAngle = 5.0f * b2_pi / 180.0f;
+	m_leftJoint = (b2RevoluteJoint*)world->CreateJoint(&jd);*/
+}
+
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -510,11 +511,12 @@ update_status ModulePhysics::PostUpdate()
 				mouse_position.y = PIXEL_TO_METERS(App->input->GetMouseY());
 
 				// test if the current body contains mouse position
-				if (f->TestPoint(mouse_position))
+				if (f->GetShape()->TestPoint(b->GetTransform(),mouse_position) == true)
 				{
-					PhysBody* body_clicked = (PhysBody*)f->GetBody()->GetUserData();
+
+					body_clicked = (PhysBody*)f->GetBody()->GetUserData();
 					LOG("HAS FET CLICK AL OBJECTE");
-					break;
+					//break;
 				}
 			}
 
@@ -539,23 +541,21 @@ update_status ModulePhysics::PostUpdate()
 		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
 
 	}
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (mouse_joint != NULL && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+
 	{
-		App->renderer->DrawLine(METERS_TO_PIXELS(mouse_position.x), METERS_TO_PIXELS(mouse_position.y), METERS_TO_PIXELS(mouse_position.x), METERS_TO_PIXELS(mouse_position.y), 100, 150, 255);
+		// TODO 3: If the player keeps pressing the mouse button, update
+		// target position and draw a red line between both anchor points
+		b2Vec2 posA, posB;
+		posA = mouse_joint->GetAnchorA();
+		//posB = mouse_joint->GetAnchorB();
+		posB.x = App->input->GetMouseX();
+		posB.y = App->input->GetMouseY();
+		App->renderer->DrawLine(METERS_TO_PIXELS(posA.x), METERS_TO_PIXELS(posA.y), METERS_TO_PIXELS(posB.x), METERS_TO_PIXELS(posB.y), 100, 150, 255);
 			
 	}
-
-	
-
-
-	// TODO 3: If the player keeps pressing the mouse button, update
-	// target position and draw a red line between both anchor points
-	
-	
-
-
-
 	// TODO 4: If the player releases the mouse button, destroy the joint
+	//if (mouse_joint != NULL && App->input->GetMouseButton())
 
 	return UPDATE_CONTINUE;
 }
@@ -577,6 +577,12 @@ void PhysBody::GetPosition(int& x, int &y) const
 	b2Vec2 pos = body->GetPosition();
 	x = METERS_TO_PIXELS(pos.x) - (width);
 	y = METERS_TO_PIXELS(pos.y) - (height);
+}
+
+void PhysBody::Force(b2Body* bodyA, int force)
+{
+	bodyA->ApplyTorque(force, true);
+	//body->ApplyTorque(32 * DEGTORAD, true);
 }
 
 float PhysBody::GetRotation() const

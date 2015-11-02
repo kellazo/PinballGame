@@ -38,8 +38,8 @@ bool ModuleSceneIntro::Start()
 	boxes.add(App->physics->CreateRectangle(544, 613, 37, 19));
 	App->physics->CreateStaticRectangle(544, 613, 37, 19);
 
-	//creem una caixa qualsevol
-	PhysBody* caixa = App->physics->CreateRectangle(300,400,125,25);
+	//definim una caixa qualsevol
+	caixa = App->physics->CreateRectangle(300,400,125,25);
 	//ara crear revolute join -> enganxar en cordenades de body que parteix des del centre i posem posicio a la esquina que es la meitat de width dividit per la meitat de heihgt
 	//segon dir a quin punt de lescenari en el anchor nomes si estas utilitzant una chain pk en aquest cas les chain ocupen tot l'escenari
 	App->physics->CreateRevoluteJoin(62, 12, 300, 400, caixa, App->physics->ground1);
@@ -70,10 +70,15 @@ update_status ModuleSceneIntro::Update()
 		ray.y = App->input->GetMouseY();
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
 		circles.getLast()->data->listener = this;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		caixa->Force(caixa->body, 32 * DEGTORAD);
+		LOG("aplicant força");
 	}
 
 

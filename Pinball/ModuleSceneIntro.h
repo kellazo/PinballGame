@@ -21,8 +21,11 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+	//creem un punter body que apuntara al objecte caixa
+	PhysBody* caixa;
 
 	PhysBody* sensor;
+
 	bool sensed;
 
 	SDL_Texture* circle;
