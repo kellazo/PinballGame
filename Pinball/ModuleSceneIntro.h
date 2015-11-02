@@ -5,6 +5,7 @@
 #include "Globals.h"
 
 class PhysBody;
+class b2PrismaticJoint;
 
 class ModuleSceneIntro : public Module
 {
@@ -23,6 +24,9 @@ public:
 	p2List<PhysBody*> ricks;
 	//creem un punter body que apuntara al objecte caixa
 	PhysBody* caixa;
+	PhysBody* BoxUp;
+	PhysBody* StaticBox;
+	b2PrismaticJoint* proba;
 
 	PhysBody* sensor;
 

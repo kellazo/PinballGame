@@ -15,7 +15,9 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
-{}
+{
+	proba = NULL;
+}
 
 // Load assets
 bool ModuleSceneIntro::Start()
@@ -35,8 +37,14 @@ bool ModuleSceneIntro::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
 	circles.add(App->physics->CreateCircle(544, 602, 11));
-	boxes.add(App->physics->CreateRectangle(544, 613, 37, 19));
-	App->physics->CreateStaticRectangle(544, 613, 37, 19);
+
+	//Prismatic joint
+	//boxes.add(App->physics->CreateRectangle(544, 613, 37, 19));
+	BoxUp = App->physics->CreateRectangle(544, 613, 37, 19);
+	StaticBox= App->physics->CreateStaticRectangle(544, 500, 37, 19);
+	
+
+	proba = App->physics->CreatePrismaticJoint(BoxUp, StaticBox);
 
 	//definim una caixa qualsevol
 	caixa = App->physics->CreateRectangle(300,400,125,25);
@@ -61,7 +69,18 @@ update_status ModuleSceneIntro::Update()
 	
 		App->renderer->Blit(pinball_empty, 0, 0);
 		App->renderer->Blit(flippers,0,0);
-	
+		int box_x, box_y;
+		BoxUp->GetPosition(box_x, box_y);
+		App->renderer->Blit(box, box_x, box_y);
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+	{
+		proba->EnableMotor(false);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP){
+
+		proba->EnableMotor(true);
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -70,7 +89,7 @@ update_status ModuleSceneIntro::Update()
 		ray.y = App->input->GetMouseY();
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
 		circles.getLast()->data->listener = this;

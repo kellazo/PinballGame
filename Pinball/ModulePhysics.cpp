@@ -75,8 +75,8 @@ bool ModulePhysics::Start()
 		508, 209,
 		523, 246,
 		523, 717,
-		562, 717,
-		566, 267,
+		571, 717,
+		569, 266,
 		547, 206,
 		529, 160,
 		504, 118,
@@ -262,6 +262,7 @@ PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int heig
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
+	fixture.isSensor = true;
 
 	b->CreateFixture(&fixture);
 
@@ -287,6 +288,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
+	fixture.restitution = 0;
 
 	b->CreateFixture(&fixture);
 
@@ -438,6 +440,22 @@ void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody*
 }
 
 // 
+
+b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB){
+	b2PrismaticJointDef jointD;
+
+	b2Vec2 vector(0.0f, 1.0f);
+	jointD.Initialize(bodyA->body, bodyB->body, bodyA->body->GetPosition(), vector);
+	jointD.lowerTranslation = -2.0f;
+	jointD.upperTranslation = 0.0f;
+	jointD.enableLimit = true;
+	jointD.maxMotorForce = -90.0f;
+	jointD.motorSpeed = -80.0f;
+	jointD.enableMotor = true;
+
+	return ((b2PrismaticJoint*) world->CreateJoint(&jointD));
+}
+
 update_status ModulePhysics::PostUpdate()
 {
 	
