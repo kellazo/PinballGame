@@ -24,6 +24,7 @@ bool ModulePlayer::Start()
 	ball.graphic = App->textures->Load("pinball/wheel1.png");
 	flipper1.graphic = App->textures->Load("pinball/f1.png");
 	flipper2.graphic = App->textures->Load("pinball/f2.png");
+	box.graphic = App->textures->Load("pinball/box.PNG");
 
 
 	ball.body = App->physics->AddBody(563, 582, 28, b_dynamic, 1.0f, 0.3f, true);
@@ -62,7 +63,10 @@ bool ModulePlayer::Start()
 	flipper2_wheel = App->physics->AddBody(392, 685, 10, b_static);
 	App->physics->CreateRevoluteJoin(80, 17, 0, 0, flipper2.body, flipper2_wheel, 30, -30);
 
-
+	//Prismatic joint
+	box.body = App->physics->AddBody({ 550, 620, 30, 20 }, b_dynamic);
+	box_wheel = App->physics->AddBody(550, 630, 2, b_static);
+	App->physics->CreatePrismaticJoint(box.body, box_wheel);
 
 	return true;
 }
@@ -77,11 +81,13 @@ bool ModulePlayer::CleanUp()
 	App->textures->Unload(ball.graphic);
 	App->textures->Unload(flipper1.graphic);
 	App->textures->Unload(flipper2.graphic);
+	App->textures->Unload(box.graphic);
 
 
 	App->physics->DestroyBody(ball.body);
 	App->physics->DestroyBody(flipper1.body);
 	App->physics->DestroyBody(flipper2.body);
+	App->physics->DestroyBody(box.body);
 
 	return true;
 }
@@ -102,6 +108,15 @@ update_status ModulePlayer::Update()
 		flipper2.body->Force(360);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		spring_push += 175.0f;
+		box.body->Push(0, spring_push);
+	}
+	else
+		spring_push = 0.0f;
+
+
 	int x, y;
 
 	ball.body->GetPosition(x, y);
@@ -114,6 +129,9 @@ update_status ModulePlayer::Update()
 
 	flipper2.body->GetPosition(x, y);
 	App->renderer->Blit(flipper2.graphic, x, y, NULL, 1.0f, flipper2.body->GetAngle(),0,0);// , flipper1.body->GetAngle(), 0, 0);
+
+	box.body->GetPosition(x, y);
+	App->renderer->Blit(box.graphic, x, y, NULL, 1.0f, box.body->GetAngle(),0,0);
 	return UPDATE_CONTINUE;
 }
 

@@ -106,6 +106,49 @@ bool ModuleSceneIntro::Start()
 		218, 833
 	};
 	App->physics->AddEdge({ 0, 0, 585, 1024 }, pinball, 138);
+
+	
+	int pinball_structure_up[32] = {
+	120, 223,
+	130, 229,
+	232, 233,
+	258, 216,
+	314, 217,
+	328, 232,
+	439, 231,
+	449, 219,
+	443, 194,
+	412, 149,
+	362, 115,
+	314, 105,
+	253, 105,
+	198, 119,
+	151, 151,
+	121, 209
+	};
+	App->physics->AddEdge({ 0, 0, 585, 1024 }, pinball_structure_up, 32);
+
+	int left_structures[12] = {
+	168, 670,
+	158, 690,
+	83, 645,
+	83, 500,
+	92, 507,
+	95, 622
+	};
+	App->physics->AddEdge({ 0, 0, 585, 1024 }, left_structures, 12);
+
+	int left_triangles[12] = {
+	184, 621,
+	140, 537,
+	129, 529,
+	129, 601,
+	172, 637,
+	181, 637
+	};
+	App->physics->AddEdge({ 0, 0, 585, 1024 }, left_triangles, 12);
+
+	
 	//App->physics->CreateChainStatic(0, 0, pinball, 138);
 
 	//flippers = App->textures->Load("pinball/flippers.png");

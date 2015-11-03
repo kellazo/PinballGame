@@ -35,6 +35,7 @@ public:
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 	double GetAngle() const;
 	void Force(int degrees);
+	void Push(float x, float y);
 
 
 public:
@@ -62,8 +63,10 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	PhysBody* AddBody(const SDL_Rect& rect, body_type type = b_dynamic, float density = 1.0f, float restitution = 0.0f, bool ccd = false, bool isSensor = false);
 	PhysBody* AddBody(int x, int y, int diameter, body_type type = b_dynamic, float density = 1.0f, float restitution = 0.0f, bool ccd = false, bool isSensor = false);
 	PhysBody* AddBody(const SDL_Rect& rect, int* points, uint count, body_type type = b_dynamic, float density = 1.0f, float restitution = 0.0f, bool isSensor = false);
+
 	PhysBody* AddEdge(const SDL_Rect& rect, int* points, uint count);
 	/*PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateStaticRectangle(int x, int y, int width, int height);
@@ -74,7 +77,8 @@ public:
 	
 	
 	void CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB, int max_angle, int min_angle);
-	//b2PrismaticJoint* CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB);
+	b2PrismaticJoint* CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB);
+
 	void DestroyBody(PhysBody* body);
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

@@ -424,6 +424,50 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
+PhysBody* ModulePhysics::AddBody(const SDL_Rect& rect, body_type type, float density, float restitution, bool ccd, bool isSensor)
+{
+	b2BodyDef body;
+
+	switch (type)
+	{
+	case b_static:
+		body.type = b2_staticBody;
+		break;
+
+	case b_kinematic:
+		body.type = b2_kinematicBody;
+		break;
+
+	default:
+		body.type = b2_dynamicBody;
+		break;
+	}
+
+	body.position.Set(PIXEL_TO_METERS(rect.x), PIXEL_TO_METERS(rect.y));
+	body.angle = 0.0f;
+	body.bullet = ccd;
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape box_shape;
+	box_shape.SetAsBox(PIXEL_TO_METERS(rect.w / 2), PIXEL_TO_METERS(rect.h / 2));
+
+	b2FixtureDef box_fixture;
+	box_fixture.shape = &box_shape;
+	box_fixture.density = density;
+	box_fixture.restitution = restitution;
+	box_fixture.isSensor = isSensor;
+
+	b->CreateFixture(&box_fixture);
+
+	PhysBody* ret = new PhysBody(b, rect, type);
+	bodies.add(ret);
+
+	b->SetUserData(ret);
+
+	return ret;
+}
+
 PhysBody* ModulePhysics::AddBody(int x, int y, int diameter, body_type type, float density, float restitution, bool ccd, bool isSensor)
 {
 	b2BodyDef body;
@@ -785,7 +829,7 @@ void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody*
 }
 
 // 
-/*
+
 b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB){
 	b2PrismaticJointDef jointD;
 
@@ -800,7 +844,7 @@ b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(PhysBody* bodyA, PhysBody*
 
 	return ((b2PrismaticJoint*) world->CreateJoint(&jointD));
 }
-*/
+
 void ModulePhysics::DestroyBody(PhysBody* body)
 {
 	assert(body);
@@ -820,6 +864,10 @@ void PhysBody::Force(int degrees)
 	
 	body->ApplyAngularImpulse(DEGTORAD * degrees, true);
 	
+}
+void PhysBody::Push(float x, float y)
+{
+	body->ApplyForceToCenter(b2Vec2(x, y), true);
 }
 
 double PhysBody::GetAngle() const

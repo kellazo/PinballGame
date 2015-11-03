@@ -29,11 +29,11 @@ public:
 public:
 	Object ball;
 	Object flipper1;
-	
 	Object flipper2;
+	Object box;
 
+	PhysBody* box_wheel;
 	PhysBody* flipper1_wheel;
-	
 	PhysBody* flipper2_wheel;
 	//PhysBody* spring_wheel;
 
