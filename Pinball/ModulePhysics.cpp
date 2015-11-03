@@ -12,10 +12,20 @@
 #pragma comment( lib, "Box2D/libx86/Release/Box2D.lib" )
 #endif
 
+PhysBody::PhysBody(b2Body* body, const SDL_Rect& rect, body_type type) : body(body), rect(rect), type(type), listener(NULL)
+{}
+
+PhysBody::~PhysBody()
+{
+	body->GetWorld()->DestroyBody(body);
+	body = NULL;
+	listener = NULL;
+}
+
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	world = NULL;
-	mouse_joint = NULL;
+//	mouse_joint = NULL;
 	debug = true;
 	
 }
@@ -24,7 +34,14 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 ModulePhysics::~ModulePhysics()
 {
 }
+// Called before render is available
+bool ModulePhysics::Init()
+{
+	LOG("Creating Physics environment");
+	bool ret = true;
 
+	return ret;
+}
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
@@ -33,10 +50,10 @@ bool ModulePhysics::Start()
 	world->SetContactListener(this);
 	
 	// needed to create joints like mouse joint
-	b2BodyDef bd;
-	ground = world->CreateBody(&bd);
+	//b2BodyDef bd;
+	//ground = world->CreateBody(&bd);
 
-	int pinball[138] = {
+	/*int pinball[138] = {
 		334, 826,
 		333, 813,
 		360, 789,
@@ -106,9 +123,11 @@ bool ModulePhysics::Start()
 		219, 815,
 		220, 833,
 		218, 833
-	};
+	};*/
 	//CreateChainStatic(0, 0, pinball, 138);
-	ground1 = CreateChainStatic(0, 0, pinball, 138);
+	//ground1 = CreateChainStatic(0, 0, pinball, 138);
+
+	/*
 	int pinball_structure_up[32] = {
 		120, 223,
 		130, 229,
@@ -202,6 +221,8 @@ bool ModulePhysics::Start()
 	jd.upperAngle = 5.0f * b2_pi / 180.0f;
 	m_leftJoint = (b2RevoluteJoint*)world->CreateJoint(&jd);
 
+	++++++++++++++++++++++++++++++
+	*/
 	
 
 	return true;
@@ -210,7 +231,15 @@ bool ModulePhysics::Start()
 // 
 update_status ModulePhysics::PreUpdate()
 {
-	world->Step(1.0f / 60.0f, 6, 2);
+	float32 timeStep = 1.0f / 60.0f;
+	int32 velocityIterations = 6;
+	int32 positionIterations = 2;
+
+	// Instruct the world to perform a single step of simulation.
+	// It is generally best to keep the time step and iterations fixed.
+	world->Step(timeStep, velocityIterations, positionIterations);
+
+	// Check for collisions on sensors (collision listener does not work for sensors)
 	
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
@@ -225,6 +254,312 @@ update_status ModulePhysics::PreUpdate()
 	
 	return UPDATE_CONTINUE;
 }
+
+update_status ModulePhysics::Update()
+{
+	return UPDATE_CONTINUE;
+}
+
+update_status ModulePhysics::PostUpdate()
+{
+
+
+	//b2Vec2 mouse_position;
+	//PhysBody* body_clicked = NULL;
+
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		debug = !debug;
+
+	if (!debug)
+		return UPDATE_CONTINUE;
+
+	// Bonus code: this will iterate all objects in the world and draw the circles
+	// You need to provide your own macro to translate meters to pixels
+	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
+	{
+		uint8 green = b->GetType() == b2BodyType::b2_staticBody ? 255 : 0;
+		uint8 blue = b->GetType() == b2BodyType::b2_kinematicBody ? 255 : 0;
+
+		for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
+		{
+			switch (f->GetType())
+			{
+				// Draw circles ------------------------------------------------
+			case b2Shape::e_circle:
+			{
+				b2CircleShape* shape = (b2CircleShape*)f->GetShape();
+				b2Vec2 pos = f->GetBody()->GetPosition();
+				App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+			}
+			break;
+
+			// Draw polygons ------------------------------------------------
+			case b2Shape::e_polygon:
+			{
+				b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
+				int32 count = polygonShape->GetVertexCount();
+				b2Vec2 prev, v;
+
+				for (int32 i = 0; i < count; ++i)
+				{
+					v = b->GetWorldPoint(polygonShape->GetVertex(i));
+					if (i > 0)
+						App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
+
+					prev = v;
+				}
+
+				v = b->GetWorldPoint(polygonShape->GetVertex(0));
+				App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
+			}
+			break;
+
+			// Draw chains contour -------------------------------------------
+			case b2Shape::e_chain:
+			{
+				b2ChainShape* shape = (b2ChainShape*)f->GetShape();
+				b2Vec2 prev, v;
+
+				for (int32 i = 0; i < shape->m_count; ++i)
+				{
+					v = b->GetWorldPoint(shape->m_vertices[i]);
+					if (i > 0)
+						App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
+					prev = v;
+				}
+
+				v = b->GetWorldPoint(shape->m_vertices[0]);
+				App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
+			}
+			break;
+
+			// Draw a single segment(edge) ----------------------------------
+
+			case b2Shape::e_edge:
+			{
+				b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
+				b2Vec2 v1, v2;
+
+				v1 = b->GetWorldPoint(shape->m_vertex0);
+				v1 = b->GetWorldPoint(shape->m_vertex1);
+				App->renderer->DrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), 100, 100, 255);
+			}
+			break;
+			}
+			/*
+			// TODO 1: If mouse button 1 is pressed ...
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			{
+				mouse_position.x = PIXEL_TO_METERS(App->input->GetMouseX());
+				mouse_position.y = PIXEL_TO_METERS(App->input->GetMouseY());
+
+				// test if the current body contains mouse position
+				if (f->GetShape()->TestPoint(b->GetTransform(), mouse_position) == true)
+				{
+
+					body_clicked = (PhysBody*)f->GetBody()->GetUserData();
+					LOG("HAS FET CLICK AL OBJECTE");
+					//break;
+				}
+			}*/
+
+
+		}
+	}
+
+	// If a body was selected we will attach a mouse joint to it
+	// so we can pull it around
+	// TODO 2: If a body was selected, create a mouse joint
+	// using mouse_joint class property
+	/*if (body_clicked != NULL)
+	{
+		b2MouseJointDef def;
+		def.bodyA = ground;
+		def.bodyB = body_clicked->body;
+		def.target = mouse_position;
+		def.dampingRatio = 0.5f;
+		def.frequencyHz = 2.0f;
+		def.maxForce = 100.0f * body_clicked->body->GetMass();
+
+		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+
+	}
+	if (mouse_joint != NULL && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+
+	{
+		// TODO 3: If the player keeps pressing the mouse button, update
+		// target position and draw a red line between both anchor points
+		b2Vec2 posA, posB;
+		posA = mouse_joint->GetAnchorA();
+		//posB = mouse_joint->GetAnchorB();
+		posB.x = App->input->GetMouseX();
+		posB.y = App->input->GetMouseY();
+		App->renderer->DrawLine(METERS_TO_PIXELS(posA.x), METERS_TO_PIXELS(posA.y), METERS_TO_PIXELS(posB.x), METERS_TO_PIXELS(posB.y), 100, 150, 255);
+
+	}*/
+	// TODO 4: If the player releases the mouse button, destroy the joint
+	//if (mouse_joint != NULL && App->input->GetMouseButton())
+
+	return UPDATE_CONTINUE;
+}
+
+// Called before quitting
+bool ModulePhysics::CleanUp()
+{
+	LOG("Destroying physics world");
+
+	p2List_item<PhysBody*>* item = bodies.getFirst();
+
+	while (item != NULL)
+	{
+		delete item->data;
+		item = item->next;
+	}
+
+	bodies.clear();
+	// Delete the whole physics world!
+	delete world;
+
+	return true;
+}
+
+PhysBody* ModulePhysics::AddBody(int x, int y, int diameter, body_type type, float density, float restitution, bool ccd, bool isSensor)
+{
+	b2BodyDef body;
+
+	switch (type)
+	{
+	case b_static:
+		body.type = b2_staticBody;
+		break;
+
+	case b_kinematic:
+		body.type = b2_kinematicBody;
+		break;
+
+	default:
+		body.type = b2_dynamicBody;
+		break;
+	}
+
+	float radius = PIXEL_TO_METERS(diameter) * 0.5f;
+
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = 0.0f;
+	body.bullet = ccd;
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = radius;
+
+	b2FixtureDef box_fixture;
+	box_fixture.shape = &shape;
+	box_fixture.density = density;
+	box_fixture.restitution = restitution;
+	box_fixture.isSensor = isSensor;
+
+	b->CreateFixture(&box_fixture);
+
+	PhysBody* ret = new PhysBody(b, { x, y, diameter, diameter }, type);
+	bodies.add(ret);
+
+	b->SetUserData(ret);
+
+	return ret;
+}
+
+PhysBody* ModulePhysics::AddBody(const SDL_Rect& rect, int* points, uint count, body_type type, float density, float restitution, bool isSensor)
+{
+	b2BodyDef body;
+
+	switch (type)
+	{
+	case b_static:
+		body.type = b2_staticBody;
+		break;
+
+	case b_kinematic:
+		body.type = b2_kinematicBody;
+		break;
+
+	default:
+		body.type = b2_dynamicBody;
+		break;
+	}
+
+	body.position.Set(PIXEL_TO_METERS(rect.x), PIXEL_TO_METERS(rect.y));
+	body.angle = 0.0f;
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape shape;
+	b2Vec2* p = new b2Vec2[count / 2];
+	for (uint i = 0; i < count / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.Set(p, count / 2);
+
+	b2FixtureDef box_fixture;
+	box_fixture.shape = &shape;
+	box_fixture.density = density;
+	box_fixture.restitution = restitution;
+	box_fixture.isSensor = isSensor;
+
+	b->CreateFixture(&box_fixture);
+
+	PhysBody* ret = new PhysBody(b, { rect.x, rect.y, rect.w, rect.h }, type);
+	bodies.add(ret);
+
+	delete[] p;
+
+	b->SetUserData(ret);
+
+	return ret;
+}
+
+PhysBody* ModulePhysics::AddEdge(const SDL_Rect& rect, int* points, uint count)
+{
+	b2BodyDef body;
+
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(rect.x), PIXEL_TO_METERS(rect.y));
+	body.angle = 0.0f;
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[count / 2];
+
+	for (uint i = 0; i < count / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);// *rect.w;
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);// *rect.h;
+	}
+
+	shape.CreateLoop(p, count / 2);
+
+	b2FixtureDef box_fixture;
+	box_fixture.shape = &shape;
+
+	b->CreateFixture(&box_fixture);
+
+	PhysBody* ret = new PhysBody(b, rect, b_static);
+	bodies.add(ret);
+
+	delete[] p;
+
+	b->SetUserData(ret);
+
+	return ret;
+}
+
+/*    ++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
@@ -249,6 +584,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 
 	return pbody;
 }
+
 
 PhysBody* ModulePhysics::CreateStaticRectangle(int x, int y, int width, int height){
 	b2BodyDef body;
@@ -392,9 +728,9 @@ PhysBody* ModulePhysics::CreateChainStatic(int x, int y, int* points, int size)
 	pbody->width = pbody->height = 0;
 	return pbody;
 }
-
+*/
 //li passem els punts de cada enclaje segons el body, i ha de rebre quins son
-void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB)
+void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody* bodyA, PhysBody* bodyB, int max_angle, int min_angle)
 {
 	//
 
@@ -426,6 +762,15 @@ void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody*
 	//per cambiar velocitat d'un joint un cop creat, s'utilitza una funció que es diu SetMotorSpeed(), per arribar, agafes el body (en aquest cas un PhysBody)
 	//((b2RevoluteJoint*)pbody->body->GetJointList()->joint)->SetMotorSpeed()
 
+
+	if (max_angle != INT_MAX && min_angle != INT_MIN)
+	{
+		jd.enableLimit = true;
+		jd.upperAngle = DEGTORAD * max_angle;
+		jd.lowerAngle = DEGTORAD * min_angle;
+	}
+
+
 	world->CreateJoint(&jd);
 
 
@@ -440,7 +785,7 @@ void ModulePhysics::CreateRevoluteJoin(int x1, int y1, int x2, int y2, PhysBody*
 }
 
 // 
-
+/*
 b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(PhysBody* bodyA, PhysBody* bodyB){
 	b2PrismaticJointDef jointD;
 
@@ -455,158 +800,12 @@ b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(PhysBody* bodyA, PhysBody*
 
 	return ((b2PrismaticJoint*) world->CreateJoint(&jointD));
 }
-
-update_status ModulePhysics::PostUpdate()
+*/
+void ModulePhysics::DestroyBody(PhysBody* body)
 {
-	
-	
-	b2Vec2 mouse_position;
-	PhysBody* body_clicked = NULL;
-	
-	
-	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		debug = !debug;
-
-	if(!debug)
-		return UPDATE_CONTINUE;
-
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
-	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
-	{
-		for(b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
-		{
-			switch(f->GetType())
-			{
-				// Draw circles ------------------------------------------------
-				case b2Shape::e_circle:
-				{
-					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
-					b2Vec2 pos = f->GetBody()->GetPosition();
-					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
-				}
-				break;
-
-				// Draw polygons ------------------------------------------------
-				case b2Shape::e_polygon:
-				{
-					b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
-					int32 count = polygonShape->GetVertexCount();
-					b2Vec2 prev, v;
-
-					for(int32 i = 0; i < count; ++i)
-					{
-						v = b->GetWorldPoint(polygonShape->GetVertex(i));
-						if(i > 0)
-							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
-
-						prev = v;
-					}
-
-					v = b->GetWorldPoint(polygonShape->GetVertex(0));
-					App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
-				}
-				break;
-
-				// Draw chains contour -------------------------------------------
-				case b2Shape::e_chain:
-				{
-					b2ChainShape* shape = (b2ChainShape*)f->GetShape();
-					b2Vec2 prev, v;
-
-					for(int32 i = 0; i < shape->m_count; ++i)
-					{
-						v = b->GetWorldPoint(shape->m_vertices[i]);
-						if(i > 0)
-							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
-						prev = v;
-					}
-
-					v = b->GetWorldPoint(shape->m_vertices[0]);
-					App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
-				}
-				break;
-
-				// Draw a single segment(edge) ----------------------------------
-				
-				case b2Shape::e_edge:
-				{
-					b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
-					b2Vec2 v1, v2;
-
-					v1 = b->GetWorldPoint(shape->m_vertex0);
-					v1 = b->GetWorldPoint(shape->m_vertex1);
-					App->renderer->DrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), 100, 100, 255);
-				}
-				break;
-			}
-
-			// TODO 1: If mouse button 1 is pressed ...
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-			{
-				mouse_position.x = PIXEL_TO_METERS(App->input->GetMouseX());
-				mouse_position.y = PIXEL_TO_METERS(App->input->GetMouseY());
-
-				// test if the current body contains mouse position
-				if (f->GetShape()->TestPoint(b->GetTransform(),mouse_position) == true)
-				{
-
-					body_clicked = (PhysBody*)f->GetBody()->GetUserData();
-					LOG("HAS FET CLICK AL OBJECTE");
-					//break;
-				}
-			}
-
-	
-		}
-	}
-
-	// If a body was selected we will attach a mouse joint to it
-	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
-	// using mouse_joint class property
-	if (body_clicked != NULL)
-	{
-		b2MouseJointDef def;
-		def.bodyA = ground;
-		def.bodyB = body_clicked->body;
-		def.target = mouse_position;
-		def.dampingRatio = 0.5f;
-		def.frequencyHz = 2.0f;
-		def.maxForce = 100.0f * body_clicked->body->GetMass();
-
-		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
-
-	}
-	if (mouse_joint != NULL && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
-
-	{
-		// TODO 3: If the player keeps pressing the mouse button, update
-		// target position and draw a red line between both anchor points
-		b2Vec2 posA, posB;
-		posA = mouse_joint->GetAnchorA();
-		//posB = mouse_joint->GetAnchorB();
-		posB.x = App->input->GetMouseX();
-		posB.y = App->input->GetMouseY();
-		App->renderer->DrawLine(METERS_TO_PIXELS(posA.x), METERS_TO_PIXELS(posA.y), METERS_TO_PIXELS(posB.x), METERS_TO_PIXELS(posB.y), 100, 150, 255);
-			
-	}
-	// TODO 4: If the player releases the mouse button, destroy the joint
-	//if (mouse_joint != NULL && App->input->GetMouseButton())
-
-	return UPDATE_CONTINUE;
-}
-
-
-// Called before quitting
-bool ModulePhysics::CleanUp()
-{
-	LOG("Destroying physics world");
-
-	// Delete the whole physics world!
-	delete world;
-
-	return true;
+	assert(body);
+	bodies.del(bodies.findNode(body));
+	delete body;
 }
 
 void PhysBody::GetPosition(int& x, int &y) const
@@ -616,10 +815,16 @@ void PhysBody::GetPosition(int& x, int &y) const
 	y = METERS_TO_PIXELS(pos.y) - (height);
 }
 
-void PhysBody::Force(b2Body* bodyA, int force)
+void PhysBody::Force(int degrees)
 {
-	bodyA->ApplyTorque(force, true);
-	//body->ApplyTorque(32 * DEGTORAD, true);
+	
+	body->ApplyAngularImpulse(DEGTORAD * degrees, true);
+	
+}
+
+double PhysBody::GetAngle() const
+{
+	return RADTODEG * body->GetAngle();
 }
 
 float PhysBody::GetRotation() const
@@ -688,3 +893,4 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 }
+

@@ -19,25 +19,26 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
-	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
+	//p2List<PhysBody*> circles;
+	//p2List<PhysBody*> boxes;
+	//p2List<PhysBody*> ricks;
 	//creem un punter body que apuntara al objecte caixa
-	PhysBody* caixa;
-	PhysBody* BoxUp;
-	PhysBody* StaticBox;
-	b2PrismaticJoint* proba;
+	//PhysBody* caixa;
+	//PhysBody* BoxUp;
+	//PhysBody* StaticBox;
+	//b2PrismaticJoint* proba;
 
-	PhysBody* sensor;
+	//PhysBody* sensor;
 
-	bool sensed;
+	//bool sensed;
 
-	SDL_Texture* circle;
-	SDL_Texture* box;
-	SDL_Texture* rick;
+	//SDL_Texture* circle;
+	//SDL_Texture* box;
+	//SDL_Texture* rick;
 	SDL_Texture* pinball_empty;
-	SDL_Texture* flippers;
-	uint bonus_fx;
-	p2Point<int> ray;
-	bool ray_on;
+	PhysBody* background;
+	//SDL_Texture* flippers;
+	//uint bonus_fx;
+	//p2Point<int> ray;
+	//bool ray_on;
 };
